@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notro Digital — Agencia Patagónica · Trevelin</title>
+  <meta name="description" content="Agencia de marketing digital en Trevelin, Patagonia. Fotografía, video, drone y gestión de redes sociales para negocios locales.">
+  <meta property="og:title" content="Notro Digital — Agencia Patagónica">
+  <meta property="og:description" content="Fotografía · Video · Drone · Redes Sociales. Trevelin, Chubut.">
+  <meta property="og:image" content="Notro_Digital_Logo.png">
+  <style>
+    :root {
+      --verde:    #1A3020;
+      --verde2:   #2D6A4F;
+      --rojo:     #C02018;
+      --naranja:  #F04E20;
+      --blanco:   #FAFAF5;
+      --carbon:   #1A1A2A;
+      --verde-c:  #8FBE9F;
+      --gris:     #4A5E50;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Segoe UI',Arial,sans-serif; background:var(--blanco); color:var(--carbon); overflow-x:hidden; }
+
+    /* ── LOADER ─────────────────────────────────────────────── */
+    #loader {
+      position:fixed; inset:0; background:var(--verde);
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      z-index:9999; transition:opacity .8s ease, visibility .8s;
+    }
+    #loader.hidden { opacity:0; visibility:hidden; }
+    #loader-text {
+      margin-top:28px; color:var(--verde-c); font-size:15px;
+      letter-spacing:5px; text-transform:uppercase; opacity:.7;
+    }
+    .loader-svg { width:110px; height:110px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes pulse { 0%,100%{opacity:.9;} 50%{opacity:.5;} }
+    .flower-spin {
+      transform-origin:55px 55px;
+      animation:spin 2.8s linear infinite;
+    }
+    .dot-pulse { animation:pulse 1.4s ease-in-out infinite; }
+
+    /* ── NAV ─────────────────────────────────────────────────── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:18px 60px;
+      background:rgba(26,48,32,.95);
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid rgba(255,255,255,.07);
+      transition:padding .3s;
+    }
+    nav.scrolled { padding:12px 60px; }
+    .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+    .nav-logo svg { width:38px; height:38px; }
+    .nav-logo-text { display:flex; flex-direction:column; }
+    .nav-logo-text span:first-child {
+      color:var(--blanco); font-size:18px; font-weight:900; letter-spacing:1px; line-height:1;
+    }
+    .nav-logo-text span:last-child {
+      color:var(--naranja); font-size:10px; letter-spacing:4px; font-weight:400;
+    }
+    .nav-links { display:flex; gap:36px; list-style:none; }
+    .nav-links a {
+      color:rgba(250,250,245,.7); text-decoration:none; font-size:14px;
+      letter-spacing:1px; transition:color .2s;
+    }
+    .nav-links a:hover { color:var(--naranja); }
+    .nav-cta {
+      background:var(--rojo); color:var(--blanco); padding:10px 24px;
+      border-radius:4px; text-decoration:none; font-size:13px;
+      font-weight:600; letter-spacing:1px; transition:background .2s;
+    }
+    .nav-cta:hover { background:var(--naranja); }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+    .hamburger span { width:24px; height:2px; background:var(--blanco); border-radius:2px; transition:.3s; }
+    .mobile-menu {
+      display:none; position:fixed; inset:0; background:var(--verde);
+      flex-direction:column; align-items:center; justify-content:center; gap:40px; z-index:99;
+    }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a { color:var(--blanco); text-decoration:none; font-size:28px; font-weight:700; }
+    .mobile-close { position:absolute; top:24px; right:28px; font-size:32px; color:var(--blanco); cursor:pointer; background:none; border:none; }
+
+    /* ── HERO ────────────────────────────────────────────────── */
+    #inicio {
+      min-height:100vh; background:var(--verde);
+      display:flex; align-items:center;
+      padding:120px 60px 80px;
+      position:relative; overflow:hidden;
+    }
+    .hero-flowers {
+      position:absolute; right:-60px; top:50%; transform:translateY(-50%);
+      opacity:.13; pointer-events:none;
+    }
+    .hero-flowers-2 {
+      position:absolute; left:-80px; bottom:-60px;
+      opacity:.08; pointer-events:none;
+    }
+    .hero-content { max-width:780px; position:relative; z-index:2; }
+    .hero-tag {
+      display:inline-block; background:var(--rojo); color:var(--blanco);
+      font-size:12px; letter-spacing:5px; padding:6px 16px;
+      border-radius:2px; margin-bottom:28px; font-weight:600;
+    }
+    .hero-h1 {
+      font-size:clamp(52px,8vw,100px); font-weight:900; line-height:.95;
+      color:var(--blanco); letter-spacing:-2px; margin-bottom:16px;
+    }
+    .hero-h1 em { color:var(--rojo); font-style:normal; }
+    .hero-sub {
+      font-size:clamp(16px,2.2vw,22px); color:var(--verde-c);
+      font-weight:300; max-width:520px; line-height:1.6; margin-bottom:40px;
+    }
+    .hero-btns { display:flex; gap:16px; flex-wrap:wrap; }
+    .btn-primary {
+      background:var(--rojo); color:var(--blanco); padding:16px 36px;
+      border-radius:4px; text-decoration:none; font-weight:700;
+      font-size:15px; letter-spacing:.5px; transition:background .2s, transform .15s;
+    }
+    .btn-primary:hover { background:var(--naranja); transform:translateY(-2px); }
+    .btn-secondary {
+      border:1.5px solid rgba(250,250,245,.3); color:var(--blanco);
+      padding:16px 36px; border-radius:4px; text-decoration:none;
+      font-size:15px; transition:border-color .2s, color .2s;
+    }
+    .btn-secondary:hover { border-color:var(--naranja); color:var(--naranja); }
+    .hero-scroll {
+      position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      color:rgba(250,250,245,.4); font-size:12px; letter-spacing:3px;
+      animation:bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(8px);} }
+    .hero-scroll svg { width:20px; opacity:.5; }
+
+    /* ── SERVICIOS ───────────────────────────────────────────── */
+    #servicios { padding:100px 60px; background:var(--blanco); }
+    .section-tag {
+      color:var(--rojo); font-size:12px; letter-spacing:5px;
+      font-weight:700; margin-bottom:14px; text-transform:uppercase;
+    }
+    .section-title {
+      font-size:clamp(32px,4vw,52px); font-weight:900;
+      color:var(--verde); line-height:1.1; margin-bottom:16px;
+    }
+    .section-sub {
+      font-size:17px; color:var(--gris); max-width:520px;
+      line-height:1.7; margin-bottom:64px;
+    }
+    .services-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:28px;
+    }
+    .service-card {
+      background:var(--blanco); border:1px solid rgba(26,48,32,.1);
+      border-radius:8px; padding:40px 32px;
+      transition:transform .25s, box-shadow .25s, border-color .25s;
+      position:relative; overflow:hidden;
+    }
+    .service-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:var(--rojo); transform:scaleX(0); transform-origin:left;
+      transition:transform .3s;
+    }
+    .service-card:hover { transform:translateY(-6px); box-shadow:0 20px 60px rgba(26,48,32,.12); }
+    .service-card:hover::before { transform:scaleX(1); }
+    .service-icon {
+      width:56px; height:56px; background:rgba(26,48,32,.06);
+      border-radius:8px; display:flex; align-items:center; justify-content:center;
+      font-size:26px; margin-bottom:24px;
+    }
+    .service-card h3 { font-size:22px; font-weight:800; color:var(--verde); margin-bottom:12px; }
+    .service-card p { font-size:15px; color:var(--gris); line-height:1.7; margin-bottom:20px; }
+    .service-price {
+      font-size:13px; color:var(--rojo); font-weight:700;
+      letter-spacing:1px; border-top:1px solid rgba(26,48,32,.08);
+      padding-top:16px; margin-top:auto;
+    }
+
+    /* ── NOSOTROS ────────────────────────────────────────────── */
+    #nosotros { padding:100px 60px; background:var(--verde); position:relative; overflow:hidden; }
+    #nosotros .section-tag { color:var(--naranja); }
+    #nosotros .section-title { color:var(--blanco); }
+    #nosotros .section-sub { color:var(--verde-c); }
+    .about-deco {
+      position:absolute; right:-100px; top:50%; transform:translateY(-50%);
+      opacity:.07; pointer-events:none;
+    }
+    .team-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:28px; position:relative; z-index:2;
+    }
+    .team-card {
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+      border-radius:8px; padding:40px 32px; transition:background .25s;
+    }
+    .team-card:hover { background:rgba(255,255,255,.08); }
+    .team-avatar {
+      width:72px; height:72px; border-radius:50%;
+      background:var(--rojo); display:flex; align-items:center; justify-content:center;
+      font-size:26px; font-weight:900; color:var(--blanco);
+      margin-bottom:20px; letter-spacing:1px;
+    }
+    .team-card h3 { font-size:22px; font-weight:800; color:var(--blanco); margin-bottom:4px; }
+    .team-role { font-size:13px; color:var(--naranja); letter-spacing:2px; font-weight:600; margin-bottom:16px; }
+    .team-card p { font-size:15px; color:var(--verde-c); line-height:1.7; }
+    .team-tools {
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:20px;
+    }
+    .team-tools span {
+      background:rgba(255,255,255,.08); color:var(--verde-c);
+      font-size:11px; padding:4px 10px; border-radius:20px; letter-spacing:1px;
+    }
+
+    /* ── CONTACTO ─────────────────────────────────────────────── */
+    #contacto { padding:100px 60px; background:var(--blanco); }
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
+    .contact-info-item { display:flex; gap:16px; align-items:flex-start; margin-bottom:28px; }
+    .contact-icon {
+      width:44px; height:44px; background:rgba(192,32,24,.1);
+      border-radius:6px; display:flex; align-items:center; justify-content:center;
+      font-size:18px; flex-shrink:0;
+    }
+    .contact-info-item h4 { font-size:13px; color:var(--gris); letter-spacing:2px; margin-bottom:4px; }
+    .contact-info-item p { font-size:16px; color:var(--verde); font-weight:600; }
+    .contact-info-item a { color:var(--rojo); text-decoration:none; font-size:16px; font-weight:600; }
+    .contact-info-item a:hover { color:var(--naranja); }
+    .form-group { margin-bottom:20px; }
+    .form-group label { display:block; font-size:13px; color:var(--gris); letter-spacing:1px; margin-bottom:8px; font-weight:600; }
+    .form-group input, .form-group textarea, .form-group select {
+      width:100%; padding:14px 18px; border:1.5px solid rgba(26,48,32,.15);
+      border-radius:6px; font-size:15px; font-family:inherit;
+      background:var(--blanco); color:var(--carbon);
+      transition:border-color .2s, box-shadow .2s;
+      appearance:none;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      outline:none; border-color:var(--rojo); box-shadow:0 0 0 3px rgba(192,32,24,.08);
+    }
+    .form-group textarea { height:130px; resize:vertical; }
+    .form-submit {
+      width:100%; background:var(--rojo); color:var(--blanco);
+      border:none; padding:16px; border-radius:6px; font-size:16px;
+      font-weight:700; cursor:pointer; letter-spacing:.5px;
+      transition:background .2s, transform .15s;
+    }
+    .form-submit:hover { background:var(--naranja); transform:translateY(-2px); }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      background:var(--carbon); padding:48px 60px;
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;
+    }
+    .footer-brand { color:rgba(255,255,255,.5); font-size:14px; }
+    .footer-brand strong { color:var(--blanco); }
+    .footer-links { display:flex; gap:28px; }
+    .footer-links a { color:rgba(255,255,255,.4); text-decoration:none; font-size:13px; transition:color .2s; }
+    .footer-links a:hover { color:var(--naranja); }
+    .footer-social { display:flex; gap:16px; }
+    .footer-social a {
+      width:36px; height:36px; border:1px solid rgba(255,255,255,.15);
+      border-radius:6px; display:flex; align-items:center; justify-content:center;
+      color:rgba(255,255,255,.5); text-decoration:none; font-size:14px; transition:.2s;
+    }
+    .footer-social a:hover { border-color:var(--naranja); color:var(--naranja); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media(max-width:900px) {
+      nav { padding:16px 24px; }
+      nav.scrolled { padding:12px 24px; }
+      .nav-links, .nav-cta { display:none; }
+      .hamburger { display:flex; }
+      #inicio { padding:100px 24px 80px; }
+      #servicios, #nosotros, #contacto { padding:72px 24px; }
+      .contact-grid { grid-template-columns:1fr; gap:48px; }
+      footer { flex-direction:column; align-items:flex-start; padding:40px 24px; }
+      .hero-flowers { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOADER ──────────────────────────────────────────────────── -->
+<div id="loader">
+  <svg class="loader-svg" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+    <!-- Círculo fondo -->
+    <circle cx="55" cy="55" r="50" fill="#1A3020" stroke="#2A4830" stroke-width="1.5"/>
+    <!-- Flores girando -->
+    <g class="flower-spin">
+      <g transform="translate(55,59) rotate(-60)">
+        <rect x="-4" y="-44" width="8" height="37" rx="4" fill="#7B1018"/>
+        <line x1="-2.5" y1="-44" x2="-7" y2="-52" stroke="#7B1018" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="2.5"  y1="-44" x2="7"  y2="-52" stroke="#7B1018" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <g transform="translate(55,59) rotate(-30)">
+        <rect x="-4" y="-44" width="8" height="37" rx="4" fill="#A81820"/>
+        <line x1="-2.5" y1="-44" x2="-7" y2="-52" stroke="#A81820" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="2.5"  y1="-44" x2="7"  y2="-52" stroke="#A81820" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <g transform="translate(55,59) rotate(0)">
+        <rect x="-4" y="-44" width="8" height="37" rx="4" fill="#C82020"/>
+        <line x1="-2.5" y1="-44" x2="-7" y2="-52" stroke="#C82020" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="2.5"  y1="-44" x2="7"  y2="-52" stroke="#C82020" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <g transform="translate(55,59) rotate(30)">
+        <rect x="-4" y="-44" width="8" height="37" rx="4" fill="#DF3516"/>
+        <line x1="-2.5" y1="-44" x2="-7" y2="-52" stroke="#DF3516" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="2.5"  y1="-44" x2="7"  y2="-52" stroke="#DF3516" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <g transform="translate(55,59) rotate(60)">
+        <rect x="-4" y="-44" width="8" height="37" rx="4" fill="#F04E20"/>
+        <line x1="-2.5" y1="-44" x2="-7" y2="-52" stroke="#F04E20" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="2.5"  y1="-44" x2="7"  y2="-52" stroke="#F04E20" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <circle cx="55" cy="59" r="5.5" fill="#5A0C14" class="dot-pulse"/>
+    </g>
+  </svg>
+  <p id="loader-text">NOTRO DIGITAL</p>
+</div>
+
+<!-- ── NAV ─────────────────────────────────────────────────────── -->
+<nav id="navbar">
+  <a href="#inicio" class="nav-logo">
+    <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="55" cy="55" r="50" fill="#1A3020"/>
+      <g transform="translate(55,59) rotate(-60)"><rect x="-3.5" y="-42" width="7" height="35" rx="3.5" fill="#7B1018"/></g>
+      <g transform="translate(55,59) rotate(-30)"><rect x="-3.5" y="-42" width="7" height="35" rx="3.5" fill="#A81820"/></g>
+      <g transform="translate(55,59) rotate(0)"><rect x="-3.5" y="-42" width="7" height="35" rx="3.5" fill="#C82020"/></g>
+      <g transform="translate(55,59) rotate(30)"><rect x="-3.5" y="-42" width="7" height="35" rx="3.5" fill="#DF3516"/></g>
+      <g transform="translate(55,59) rotate(60)"><rect x="-3.5" y="-42" width="7" height="35" rx="3.5" fill="#F04E20"/></g>
+      <circle cx="55" cy="59" r="5" fill="#5A0C14"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span>NOTRO</span>
+      <span>DIGITAL</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Trabajemos juntos</a>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <a href="#servicios" onclick="toggleMenu()">Servicios</a>
+  <a href="#nosotros" onclick="toggleMenu()">Nosotros</a>
+  <a href="#contacto" onclick="toggleMenu()">Contacto</a>
+  <a href="#contacto" class="btn-primary" onclick="toggleMenu()">Trabajemos juntos</a>
+</div>
+
+<!-- ── HERO ─────────────────────────────────────────────────────── -->
+<section id="inicio">
+  <!-- Flores decorativas -->
+  <svg class="hero-flowers" viewBox="0 0 600 600" width="600" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(300,300)">
+      <g transform="rotate(-60)"><rect x="-18" y="-200" width="36" height="165" rx="18" fill="#C82020"/></g>
+      <g transform="rotate(-30)"><rect x="-18" y="-200" width="36" height="165" rx="18" fill="#DF3516"/></g>
+      <g transform="rotate(0)"> <rect x="-18" y="-200" width="36" height="165" rx="18" fill="#F04E20"/></g>
+      <g transform="rotate(30)"><rect x="-18" y="-200" width="36" height="165" rx="18" fill="#DF3516"/></g>
+      <g transform="rotate(60)"><rect x="-18" y="-200" width="36" height="165" rx="18" fill="#C82020"/></g>
+    </g>
+  </svg>
+  <svg class="hero-flowers-2" viewBox="0 0 400 400" width="360" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(200,200)">
+      <g transform="rotate(-60)"><rect x="-12" y="-130" width="24" height="108" rx="12" fill="#F04E20"/></g>
+      <g transform="rotate(-30)"><rect x="-12" y="-130" width="24" height="108" rx="12" fill="#C82020"/></g>
+      <g transform="rotate(0)"> <rect x="-12" y="-130" width="24" height="108" rx="12" fill="#A81820"/></g>
+      <g transform="rotate(30)"><rect x="-12" y="-130" width="24" height="108" rx="12" fill="#C82020"/></g>
+      <g transform="rotate(60)"><rect x="-12" y="-130" width="24" height="108" rx="12" fill="#F04E20"/></g>
+    </g>
+  </svg>
+
+  <div class="hero-content">
+    <span class="hero-tag">📍 Trevelin · Patagonia</span>
+    <h1 class="hero-h1">
+      Marketing<br>digital <em>con</em><br>raíces en el sur
+    </h1>
+    <p class="hero-sub">Somos una agencia patagónica que trabaja con fotografía profesional, video, drone y estrategia digital para que los negocios de la región lleguen a más clientes.</p>
+    <div class="hero-btns">
+      <a href="#servicios" class="btn-primary">Ver servicios</a>
+      <a href="#contacto" class="btn-secondary">Hablemos</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>scroll</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ── SERVICIOS ──────────────────────────────────────────────── -->
+<section id="servicios">
+  <p class="section-tag">Lo que hacemos</p>
+  <h2 class="section-title">Servicios para negocios<br>que quieren crecer</h2>
+  <p class="section-sub">Desde una sesión de fotos hasta la gestión completa de tus redes. Elegís lo que necesitás.</p>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">📸</div>
+      <h3>Fotografía Profesional</h3>
+      <p>Sesiones para productos, locales, gastronomía y servicios. Imágenes que hacen que tu negocio se vea tan bien como la Patagonia que lo rodea.</p>
+      <p class="service-price">Desde $60.000 por sesión</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎥</div>
+      <h3>Video & Reels</h3>
+      <p>Videos de presentación del negocio y packs de Reels para Instagram y TikTok. Contenido que genera visitas y clientes reales.</p>
+      <p class="service-price">Desde $100.000 por pack</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🚁</div>
+      <h3>Drone</h3>
+      <p>Tomas aéreas profesionales para turismo, inmobiliarias, eventos y gastronomía. El sur visto desde arriba es imbatible.</p>
+      <p class="service-price">Desde $80.000 por vuelo</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📱</div>
+      <h3>Gestión de Redes</h3>
+      <p>Publicamos, respondemos y hacemos crecer tu comunidad mes a mes. Vos atendés tu negocio, nosotros atendemos tus redes.</p>
+      <p class="service-price">Desde $50.000 / mes</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── NOSOTROS ───────────────────────────────────────────────── -->
+<section id="nosotros">
+  <svg class="about-deco" viewBox="0 0 500 500" width="500" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(250,250)">
+      <g transform="rotate(-60)"><rect x="-15" y="-180" width="30" height="148" rx="15" fill="#F04E20"/></g>
+      <g transform="rotate(-30)"><rect x="-15" y="-180" width="30" height="148" rx="15" fill="#C82020"/></g>
+      <g transform="rotate(0)"> <rect x="-15" y="-180" width="30" height="148" rx="15" fill="#A81820"/></g>
+      <g transform="rotate(30)"><rect x="-15" y="-180" width="30" height="148" rx="15" fill="#C82020"/></g>
+      <g transform="rotate(60)"><rect x="-15" y="-180" width="30" height="148" rx="15" fill="#F04E20"/></g>
+    </g>
+  </svg>
+
+  <p class="section-tag">El equipo</p>
+  <h2 class="section-title">No somos de Buenos Aires.<br>Somos de acá.</h2>
+  <p class="section-sub">Un equipo patagónico que conoce la región, entiende a sus clientes y habla el mismo idioma que tu negocio.</p>
+
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar">M</div>
+      <h3>Marcos</h3>
+      <p class="team-role">Director Comercial</p>
+      <p>Gestión, ventas y estrategia. Se encarga de entender qué necesita cada negocio y de que los proyectos lleguen a buen puerto.</p>
+      <div class="team-tools">
+        <span>Estrategia</span><span>Ventas</span><span>Gestión</span>
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">D</div>
+      <h3>Daniela</h3>
+      <p class="team-role">Gestora de Redes</p>
+      <p>Docente de biología convertida en experta en comunicación digital. Redacta, publica y construye comunidades con la misma dedicación que pone en el aula.</p>
+      <div class="team-tools">
+        <span>Community</span><span>Redacción</span><span>Organización</span>
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">M</div>
+      <h3>Maxi</h3>
+      <p class="team-role">Director de Contenido</p>
+      <p>Cámara en mano o drone en el aire, Maxi produce el contenido visual que hace que los negocios de la región se vean distintos al resto.</p>
+      <div class="team-tools">
+        <span>Fotografía</span><span>Video</span><span>Drone</span><span>Edición</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACTO ──────────────────────────────────────────────── -->
+<section id="contacto">
+  <p class="section-tag">Trabajemos juntos</p>
+  <h2 class="section-title">¿Tu negocio necesita<br>presencia digital?</h2>
+  <p class="section-sub">Escribinos sin compromiso. Te respondemos en menos de 24 horas.</p>
+
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-info-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <h4>UBICACIÓN</h4>
+          <p>Trevelin, Chubut · Patagonia Argentina</p>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">✉️</div>
+        <div>
+          <h4>EMAIL</h4>
+          <a href="mailto:digitalnotro@gmail.com">digitalnotro@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">📸</div>
+        <div>
+          <h4>INSTAGRAM</h4>
+          <a href="https://instagram.com/notro_digital_patagonia" target="_blank">@notro_digital_patagonia</a>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">🌍</div>
+        <div>
+          <h4>ZONA DE COBERTURA</h4>
+          <p>Trevelin · Esquel · Corcovado · El Hoyo · Región</p>
+        </div>
+      </div>
+    </div>
+
+    <form id="contactForm" action="https://formspree.io/f/REEMPLAZAR_CON_TU_ID" method="POST">
+      <div class="form-group">
+        <label>NOMBRE Y NEGOCIO</label>
+        <input type="text" name="nombre" placeholder="Tu nombre y el nombre de tu negocio" required>
+      </div>
+      <div class="form-group">
+        <label>EMAIL O WHATSAPP</label>
+        <input type="text" name="contacto" placeholder="Para responderte" required>
+      </div>
+      <div class="form-group">
+        <label>¿QUÉ NECESITÁS?</label>
+        <select name="servicio">
+          <option value="">Seleccioná un servicio</option>
+          <option>Fotografía profesional</option>
+          <option>Video & Reels</option>
+          <option>Drone</option>
+          <option>Gestión de redes sociales</option>
+          <option>Todo junto / consulta general</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>MENSAJE</label>
+        <textarea name="mensaje" placeholder="Contanos brevemente sobre tu negocio y qué te gustaría mejorar"></textarea>
+      </div>
+      <button type="submit" class="form-submit">Enviar mensaje 🔴</button>
+    </form>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer>
+  <p class="footer-brand"><strong>Notro Digital</strong> · Agencia Patagónica · Trevelin, Chubut</p>
+  <div class="footer-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#nosotros">Nosotros</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+  <div class="footer-social">
+    <a href="https://instagram.com/notro_digital_patagonia" target="_blank" title="Instagram">IG</a>
+    <a href="mailto:digitalnotro@gmail.com" title="Email">@</a>
+  </div>
+</footer>
+
+<script>
+  // Loader
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+    }, 2400);
+  });
+
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Form feedback
+  const form = document.getElementById('contactForm');
+  form.addEventListener('submit', e => {
+    const btn = form.querySelector('.form-submit');
+    btn.textContent = 'Enviando...';
+    btn.style.background = '#2D6A4F';
+  });
+</script>
+</body>
+</html>
