@@ -521,13 +521,18 @@
     </div>
 
     <form id="contactForm" action="https://formspree.io/f/xlgzneky" method="POST">
+      <input type="hidden" name="_subject" value="🌿 Nuevo contacto desde notrodigital.com.ar">
       <div class="form-group">
         <label>NOMBRE Y NEGOCIO</label>
         <input type="text" name="nombre" placeholder="Tu nombre y el nombre de tu negocio" required>
       </div>
       <div class="form-group">
-        <label>EMAIL O WHATSAPP</label>
-        <input type="text" name="contacto" placeholder="Para responderte" required>
+        <label>EMAIL</label>
+        <input type="email" name="_replyto" placeholder="Tu correo electrónico" required>
+      </div>
+      <div class="form-group">
+        <label>WHATSAPP <span style="font-size:12px;opacity:.6;font-weight:400">(opcional — para contacto directo)</span></label>
+        <input type="text" name="whatsapp" placeholder="Ej: 2945 123456">
       </div>
       <div class="form-group">
         <label>¿QUÉ NECESITÁS?</label>
